@@ -1,7 +1,10 @@
 import { plainToClass } from "class-transformer";
-import { validateSync } from "class-validator";
+import { IsNotEmpty, validateSync } from "class-validator";
 
-export class EnvironmentVariables { }
+export class EnvironmentVariables {
+    @IsNotEmpty()
+    DATABASE_URL: string
+}
 
 export function validateConfig(config: Record<string, unknown>): EnvironmentVariables {
     const configObj = plainToClass(EnvironmentVariables, config, { enableImplicitConversion: true })
