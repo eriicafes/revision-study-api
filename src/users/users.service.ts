@@ -22,9 +22,17 @@ export class UsersService {
     return users.map(user => new UserEntity(user))
   }
 
-  async findOne(id: string): Promise<UserEntity> {
+  async findById(id: string): Promise<UserEntity> {
     const user = await this.prismaService.user.findUnique({
       where: { id }
+    })
+
+    return new UserEntity(user)
+  }
+
+  async findByEmail(email: string): Promise<UserEntity> {
+    const user = await this.prismaService.user.findUnique({
+      where: { email }
     })
 
     return new UserEntity(user)

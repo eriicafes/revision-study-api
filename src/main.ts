@@ -1,6 +1,7 @@
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { PrismaService } from './core/services/prisma.service';
 
 async function bootstrap() {
@@ -16,6 +17,9 @@ async function bootstrap() {
 
   // transform response entity
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
+
+  // protect all routes with jwt auth
+  app.useGlobalGuards(app.get(JwtAuthGuard))
 
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app)

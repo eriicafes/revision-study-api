@@ -1,9 +1,16 @@
 import { plainToClass } from "class-transformer";
-import { IsNotEmpty, validateSync } from "class-validator";
+import { IsNotEmpty, IsNumber, IsPositive, validateSync } from "class-validator";
 
 export class EnvironmentVariables {
     @IsNotEmpty()
     DATABASE_URL: string
+
+    @IsNotEmpty()
+    APP_SECRET: string
+
+    @IsNumber()
+    @IsPositive()
+    TOKEN_LIFETIME_IN_DAYS: number
 }
 
 export function validateConfig(config: Record<string, unknown>): EnvironmentVariables {
