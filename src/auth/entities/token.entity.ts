@@ -1,5 +1,5 @@
 export class TokenEntity {
-    accessToken: string;
+    accessToken!: string;
 
     constructor(token: TokenEntity) {
         Object.assign(this, token)

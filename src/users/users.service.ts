@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
@@ -23,11 +23,15 @@ export class UsersService {
   public async findById(id: string): Promise<UserEntity> {
     const user = await this.usersRepository.findById(id)
 
+    if (!user) throw new NotFoundException()
+
     return new UserEntity(user)
   }
 
   public async findByEmail(email: string): Promise<UserEntity> {
     const user = await this.usersRepository.findByEmail(email)
+
+    if (!user) throw new NotFoundException()
 
     return new UserEntity(user)
   }
