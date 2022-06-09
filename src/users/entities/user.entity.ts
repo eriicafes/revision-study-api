@@ -4,6 +4,8 @@ import { Exclude } from "class-transformer";
 export class UserEntity implements User {
     id: string;
 
+    email: string;
+
     firstName: string;
 
     lastName: string;
