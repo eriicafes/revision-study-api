@@ -1,56 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/core/services/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(private readonly usersRepository: UsersRepository) { }
 
-  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const user = await this.prismaService.user.create({
-      data: createUserDto
-    })
+  public async create(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const user = await this.usersRepository.create(createUserDto)
 
     return new UserEntity(user)
   }
 
-  async findAll(): Promise<UserEntity[]> {
-    const users = await this.prismaService.user.findMany()
+  public async findAll(): Promise<UserEntity[]> {
+    const users = await this.usersRepository.findAll()
 
     return users.map(user => new UserEntity(user))
   }
 
-  async findById(id: string): Promise<UserEntity> {
-    const user = await this.prismaService.user.findUnique({
-      where: { id }
-    })
+  public async findById(id: string): Promise<UserEntity> {
+    const user = await this.usersRepository.findById(id)
 
     return new UserEntity(user)
   }
 
-  async findByEmail(email: string): Promise<UserEntity> {
-    const user = await this.prismaService.user.findUnique({
-      where: { email }
-    })
+  public async findByEmail(email: string): Promise<UserEntity> {
+    const user = await this.usersRepository.findByEmail(email)
 
     return new UserEntity(user)
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserEntity> {
-    const user = await this.prismaService.user.update({
-      where: { id },
-      data: updateUserDto
-    })
+  public async update(id: string, updateUserDto: UpdateUserDto): Promise<UserEntity> {
+    const user = await this.usersRepository.update(id, updateUserDto)
 
     return new UserEntity(user)
   }
 
-  async remove(id: string): Promise<UserEntity> {
-    const user = await this.prismaService.user.delete({
-      where: { id }
-    })
+  public async remove(id: string): Promise<UserEntity> {
+    const user = await this.usersRepository.remove(id)
 
     return new UserEntity(user)
   }
