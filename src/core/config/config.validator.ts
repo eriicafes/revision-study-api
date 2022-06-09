@@ -1,7 +1,17 @@
 import { plainToClass } from "class-transformer";
-import { validateSync } from "class-validator";
+import { IsNotEmpty, IsNumber, IsPositive, validateSync } from "class-validator";
 
-export class EnvironmentVariables { }
+export class EnvironmentVariables {
+    @IsNotEmpty()
+    DATABASE_URL!: string
+
+    @IsNotEmpty()
+    APP_SECRET!: string
+
+    @IsNumber()
+    @IsPositive()
+    TOKEN_LIFETIME_IN_DAYS!: number
+}
 
 export function validateConfig(config: Record<string, unknown>): EnvironmentVariables {
     const configObj = plainToClass(EnvironmentVariables, config, { enableImplicitConversion: true })
@@ -10,8 +20,8 @@ export function validateConfig(config: Record<string, unknown>): EnvironmentVari
 
     if (errors.length > 0) {
         const errorMessages = errors.reduce((acc, error) => {
-            return [...acc, ...Object.values(error.constraints)]
-        }, [])
+            return [...acc, ...Object.values(error.constraints || {})]
+        }, [] as string[])
         console.log("Configuration error:", errorMessages.map(e => "\n* " + e).join(""))
         throw new Error("Configuration error")
     }
