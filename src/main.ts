@@ -1,11 +1,11 @@
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { NestFactory, Reflector } from '@nestjs/core';
-import { AppModule } from '~/app.module';
-import { JwtAuthGuard } from '~/auth/guards/jwt-auth.guard';
-import { PrismaService } from '~/core/services/prisma.service';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common'
+import { NestFactory, Reflector } from '@nestjs/core'
+import { AppModule } from '~/app.module'
+import { JwtAuthGuard } from '~/auth/guards/jwt-auth.guard'
+import { PrismaService } from '~/core/services/prisma.service'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule)
 
   // validate route input
   app.useGlobalPipes(
@@ -15,17 +15,17 @@ async function bootstrap() {
         enableImplicitConversion: true,
       },
     }),
-  );
+  )
 
   // transform response entity
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
 
   // protect all routes with jwt auth
-  app.useGlobalGuards(app.get(JwtAuthGuard));
+  app.useGlobalGuards(app.get(JwtAuthGuard))
 
-  const prismaService = app.get(PrismaService);
-  await prismaService.enableShutdownHooks(app);
+  const prismaService = app.get(PrismaService)
+  await prismaService.enableShutdownHooks(app)
 
-  await app.listen(3000);
+  await app.listen(3000)
 }
-bootstrap();
+bootstrap()

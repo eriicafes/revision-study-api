@@ -1,53 +1,53 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from '~/users/dto/create-user.dto';
-import { UpdateUserDto } from '~/users/dto/update-user.dto';
-import { UserEntity } from '~/users/entities/user.entity';
-import { UsersRepository } from '~/users/users.repository';
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { CreateUserDto } from '~/users/dto/create-user.dto'
+import { UpdateUserDto } from '~/users/dto/update-user.dto'
+import { UserEntity } from '~/users/entities/user.entity'
+import { UsersRepository } from '~/users/users.repository'
 
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   public async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const user = await this.usersRepository.create(createUserDto);
+    const user = await this.usersRepository.create(createUserDto)
 
-    return new UserEntity(user);
+    return new UserEntity(user)
   }
 
   public async findAll(): Promise<UserEntity[]> {
-    const users = await this.usersRepository.findAll();
+    const users = await this.usersRepository.findAll()
 
-    return users.map((user) => new UserEntity(user));
+    return users.map((user) => new UserEntity(user))
   }
 
   public async findById(id: string): Promise<UserEntity> {
-    const user = await this.usersRepository.findById(id);
+    const user = await this.usersRepository.findById(id)
 
-    if (!user) throw new NotFoundException();
+    if (!user) throw new NotFoundException()
 
-    return new UserEntity(user);
+    return new UserEntity(user)
   }
 
   public async findByEmail(email: string): Promise<UserEntity> {
-    const user = await this.usersRepository.findByEmail(email);
+    const user = await this.usersRepository.findByEmail(email)
 
-    if (!user) throw new NotFoundException();
+    if (!user) throw new NotFoundException()
 
-    return new UserEntity(user);
+    return new UserEntity(user)
   }
 
   public async update(
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<UserEntity> {
-    const user = await this.usersRepository.update(id, updateUserDto);
+    const user = await this.usersRepository.update(id, updateUserDto)
 
-    return new UserEntity(user);
+    return new UserEntity(user)
   }
 
   public async remove(id: string): Promise<UserEntity> {
-    const user = await this.usersRepository.remove(id);
+    const user = await this.usersRepository.remove(id)
 
-    return new UserEntity(user);
+    return new UserEntity(user)
   }
 }

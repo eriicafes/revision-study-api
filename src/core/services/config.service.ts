@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { EnvironmentVariables } from '~/core/config/config.validator';
+import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { EnvironmentVariables } from '~/core/config/config.validator'
 
 @Injectable()
 export class AppConfigService {
@@ -10,6 +10,6 @@ export class AppConfigService {
     K extends keyof EnvironmentVariables,
     V extends EnvironmentVariables[K],
   >(key: K) {
-    return this.configService.get<V>(key);
+    return this.configService.get<V>(key)
   }
 }
