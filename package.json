@@ -53,7 +53,9 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.1",
     "jest": "28.0.3",
+    "lint-staged": "^13.0.1",
     "prettier": "^2.3.2",
     "prisma": "^3.15.0",
     "source-map-support": "^0.5.20",
@@ -79,6 +81,9 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^~/(.*)$": "<rootDir>/../src/$1"
+    }
   }
 }
