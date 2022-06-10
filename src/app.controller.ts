@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from '~/app.service';
-import { Guest } from './auth/decorators/auth.decorator';
+import { Controller, Get } from '@nestjs/common'
+import { AppService } from '~/app.service'
+import { Guest } from './auth/decorators/auth.decorator'
 
 @Guest()
 @Controller()
@@ -9,6 +9,6 @@ export class AppController {
 
   @Get()
   ping() {
-    return this.appService.ping();
+    return this.appService.ping()
   }
 }

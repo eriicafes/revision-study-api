@@ -1,6 +1,6 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from '~/app.controller';
-import { AppService } from '~/app.service';
+import { Test, TestingModule } from '@nestjs/testing'
+import { AppController } from '~/app.controller'
+import { AppService } from '~/app.service'
 
 describe('AppController', () => {
   let appController: AppController
@@ -16,7 +16,7 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should return "{ "ping": "pong" }"', () => {
-      expect(appController.ping()).toEqual({ ping: "pong" });
-    });
-  });
-});
+      expect(appController.ping()).toEqual({ ping: 'pong' })
+    })
+  })
+})
