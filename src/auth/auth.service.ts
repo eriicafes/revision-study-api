@@ -12,7 +12,7 @@ export class AuthService {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   // authenticates a user given an email and password
   // authentication fails if user does not exist or if password does not match

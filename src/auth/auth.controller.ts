@@ -9,7 +9,7 @@ import { UserEntity } from '~/users/entities/user.entity';
 @Guest()
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('login')
   public async login(@Body() loginUserDto: LoginUserDto) {

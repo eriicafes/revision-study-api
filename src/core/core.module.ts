@@ -10,4 +10,4 @@ import { PrismaService } from '~/core/services/prisma.service';
   providers: [AppConfigService, PrismaService],
   exports: [AppConfigService, PrismaService],
 })
-export class CoreModule { }
+export class CoreModule {}
