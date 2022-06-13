@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common'
-import { AppService } from '~/app.service'
+import { AppService } from './app.service'
 import { Guest } from './auth/decorators/auth.decorator'
 
 @Guest()
