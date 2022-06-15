@@ -9,6 +9,8 @@ export class CollectionEntity implements CollectionWithQuestions {
 
   userId!: string
 
+  creatorId!: string | null
+
   title!: string
 
   description!: string

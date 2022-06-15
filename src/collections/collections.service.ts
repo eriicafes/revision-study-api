@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { CollectionsRepository } from './collections.repository'
 import { CreateCollectionDto } from './dto/create-collection.dto'
 import { UpdateCollectionDto } from './dto/update-collection.dto'
@@ -29,8 +29,6 @@ export class CollectionsService {
   public async findById(userId: string, id: string): Promise<CollectionEntity> {
     const collection = await this.collectionsRepository.findById(userId, id)
 
-    if (!collection) throw new NotFoundException()
-
     return new CollectionEntity(collection)
   }
 
@@ -45,15 +43,23 @@ export class CollectionsService {
       updateCollectionDto,
     )
 
-    if (!collection) throw new NotFoundException()
-
     return new CollectionEntity(collection)
   }
 
   public async remove(userId: string, id: string): Promise<CollectionEntity> {
     const collection = await this.collectionsRepository.remove(userId, id)
 
-    if (!collection) throw new NotFoundException()
+    return new CollectionEntity(collection)
+  }
+
+  public async import(userId: string, id: string): Promise<CollectionEntity> {
+    const collection = await this.collectionsRepository.import(userId, id)
+
+    return new CollectionEntity(collection)
+  }
+
+  public async clone(userId: string, id: string): Promise<CollectionEntity> {
+    const collection = await this.collectionsRepository.clone(userId, id)
 
     return new CollectionEntity(collection)
   }
@@ -69,8 +75,6 @@ export class CollectionsService {
       questionId,
     )
 
-    if (!collection) throw new NotFoundException()
-
     return new CollectionEntity(collection)
   }
 
@@ -84,8 +88,6 @@ export class CollectionsService {
       id,
       questionId,
     )
-
-    if (!collection) throw new NotFoundException()
 
     return new CollectionEntity(collection)
   }

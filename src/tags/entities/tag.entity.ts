@@ -14,6 +14,8 @@ export class TagEntity implements TagWithCollections {
 
   userId!: string
 
+  creatorId!: string | null
+
   title!: string
 
   description!: string

@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { IsBoolean, IsNotEmpty, IsOptional } from 'class-validator'
 
 export class CreateCollectionDto
-  implements Omit<Prisma.CollectionCreateInput, 'user'>
+  implements Omit<Prisma.CollectionCreateInput, 'user' | 'creator'>
 {
   @IsNotEmpty()
   title!: string

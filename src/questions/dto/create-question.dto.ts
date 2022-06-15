@@ -8,7 +8,7 @@ import {
 } from 'class-validator'
 
 export class CreateQuestionDto
-  implements Omit<Prisma.QuestionCreateInput, 'user'>
+  implements Omit<Prisma.QuestionCreateInput, 'user' | 'creator'>
 {
   @IsNotEmpty()
   content!: string

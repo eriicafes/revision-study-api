@@ -11,39 +11,46 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(cuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  email       String       @unique
-  firstName   String
-  lastName    String
-  password    String
-  questions   Question[]
-  collections Collection[]
-  tags        Tag[]
-  tests       Test[]
+  id                  String       @id @default(cuid())
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  email               String       @unique
+  firstName           String
+  lastName            String
+  password            String
+  questions           Question[]   @relation(name: "QuestionOwner")
+  authoredQuestions   Question[]   @relation(name: "QuestionOriginalCreator")
+  collections         Collection[] @relation(name: "CollectionOwner")
+  authoredCollections Collection[] @relation(name: "CollectionOriginalCreator")
+  tags                Tag[]        @relation(name: "TagOwner")
+  authoredTags        Tag[]        @relation(name: "TagOriginalCreator")
+  tests               Test[]
 }
 
 model Question {
-  id           String           @id @default(cuid())
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
-  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String       @id @default(cuid())
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  user         User         @relation(name: "QuestionOwner", fields: [userId], references: [id], onDelete: Cascade)
   userId       String
+  creator      User?        @relation(name: "QuestionOriginalCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  creatorId    String?
   content      String
   answer       String
   otherOptions String[]
   collections  Collection[]
   tests        Test[]
-  results      ResultQuestion[]
+  answers      Answer[]
 }
 
 model Collection {
   id          String     @id @default(cuid())
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User       @relation(name: "CollectionOwner", fields: [userId], references: [id], onDelete: Cascade)
   userId      String
+  creator     User?      @relation(name: "CollectionOriginalCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  creatorId   String?
   title       String
   description String
   isPrivate   Boolean    @default(false)
@@ -57,8 +64,10 @@ model Tag {
   id          String       @id @default(cuid())
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User         @relation(name: "TagOwner", fields: [userId], references: [id], onDelete: Cascade)
   userId      String
+  creator     User?        @relation(name: "TagOriginalCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  creatorId   String?
   title       String
   description String
   isPrivate   Boolean      @default(false)
@@ -80,15 +89,15 @@ model Test {
 }
 
 model Result {
-  id        String           @id @default(cuid())
-  createdAt DateTime         @default(now())
-  test      Test             @relation(fields: [testId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  test      Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
   testId    String
   score     Float
-  questions ResultQuestion[]
+  answers   Answer[]
 }
 
-model ResultQuestion {
+model Answer {
   createdAt  DateTime @default(now())
   question   Question @relation(fields: [questionId], references: [id])
   questionId String

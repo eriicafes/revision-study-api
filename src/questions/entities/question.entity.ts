@@ -6,6 +6,8 @@ export class QuestionEntity implements Question {
 
   userId!: string
 
+  creatorId!: string | null
+
   content!: string
 
   @Exclude()
