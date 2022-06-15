@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
-import { ResultQuestionWithTestEntity } from '~/tests/entities/result.entity'
+import { Injectable } from '@nestjs/common'
 import { CreateQuestionDto } from './dto/create-question.dto'
 import { UpdateQuestionDto } from './dto/update-question.dto'
+import { AnswerLeanEntity } from './entities/answer.entity'
 import { QuestionEntity } from './entities/question.entity'
 import { QuestionsRepository } from './questions.repository'
 
@@ -20,15 +20,14 @@ export class QuestionsService {
 
     return new QuestionEntity(question)
   }
-  public async results(
+
+  public async answers(
     userId: string,
     id: string,
-  ): Promise<ResultQuestionWithTestEntity[]> {
-    const results = await this.questionsRepository.results(userId, id)
+  ): Promise<AnswerLeanEntity[]> {
+    const answers = await this.questionsRepository.answers(userId, id)
 
-    if (!results) throw new NotFoundException()
-
-    return results.map((result) => new ResultQuestionWithTestEntity(result))
+    return answers.map((answer) => new AnswerLeanEntity(answer))
   }
 
   public async findAll(userId: string): Promise<QuestionEntity[]> {
@@ -39,8 +38,6 @@ export class QuestionsService {
 
   public async findById(userId: string, id: string): Promise<QuestionEntity> {
     const question = await this.questionsRepository.findById(userId, id)
-
-    if (!question) throw new NotFoundException()
 
     return new QuestionEntity(question)
   }
@@ -56,15 +53,11 @@ export class QuestionsService {
       updateQuestionDto,
     )
 
-    if (!question) throw new NotFoundException()
-
     return new QuestionEntity(question)
   }
 
   public async remove(userId: string, id: string): Promise<QuestionEntity> {
     const question = await this.questionsRepository.remove(userId, id)
-
-    if (!question) throw new NotFoundException()
 
     return new QuestionEntity(question)
   }

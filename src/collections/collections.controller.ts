@@ -11,7 +11,6 @@ import { User } from '~/auth/decorators/user.decorator'
 import { UserEntity } from '~/users/entities/user.entity'
 import { CollectionsService } from './collections.service'
 import { CreateCollectionDto } from './dto/create-collection.dto'
-import { LinkCollectionQuestionDto } from './dto/link-collection-question.dto'
 import { UpdateCollectionDto } from './dto/update-collection.dto'
 
 @Controller('collections')
@@ -50,29 +49,31 @@ export class CollectionsController {
     return this.collectionsService.remove(user.id, id)
   }
 
-  @Post(':id/questions/link')
+  @Post(':id/import')
+  import(@User() user: UserEntity, @Param('id') id: string) {
+    return this.collectionsService.import(user.id, id)
+  }
+
+  @Post(':id/clone')
+  clone(@User() user: UserEntity, @Param('id') id: string) {
+    return this.collectionsService.clone(user.id, id)
+  }
+
+  @Post(':id/questions/link/:questionId')
   linkQuestion(
     @User() user: UserEntity,
     @Param('id') id: string,
-    @Body() linkCollectionQuestionDto: LinkCollectionQuestionDto,
+    @Param('questionId') questionId: string,
   ) {
-    return this.collectionsService.linkQuestion(
-      user.id,
-      id,
-      linkCollectionQuestionDto.questionId,
-    )
+    return this.collectionsService.linkQuestion(user.id, id, questionId)
   }
 
-  @Post(':id/questions/unlink')
+  @Post(':id/questions/unlink/:questionId')
   unlinkQuestion(
     @User() user: UserEntity,
     @Param('id') id: string,
-    @Body() linkCollectionQuestionDto: LinkCollectionQuestionDto,
+    @Param('questionId') questionId: string,
   ) {
-    return this.collectionsService.unlinkQuestion(
-      user.id,
-      id,
-      linkCollectionQuestionDto.questionId,
-    )
+    return this.collectionsService.unlinkQuestion(user.id, id, questionId)
   }
 }

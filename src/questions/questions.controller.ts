@@ -25,9 +25,9 @@ export class QuestionsController {
     return this.questionsService.create(user.id, createQuestionDto)
   }
 
-  @Get(':id/results')
-  results(@User() user: UserEntity, @Param('id') id: string) {
-    return this.questionsService.results(user.id, id)
+  @Get(':id/answers')
+  answers(@User() user: UserEntity, @Param('id') id: string) {
+    return this.questionsService.answers(user.id, id)
   }
 
   @Get()

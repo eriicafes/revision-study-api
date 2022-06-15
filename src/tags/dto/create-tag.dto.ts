@@ -1,7 +1,9 @@
 import { Prisma } from '@prisma/client'
 import { IsBoolean, IsNotEmpty, IsOptional } from 'class-validator'
 
-export class CreateTagDto implements Omit<Prisma.TagCreateInput, 'user'> {
+export class CreateTagDto
+  implements Omit<Prisma.TagCreateInput, 'user' | 'creator'>
+{
   @IsNotEmpty()
   title!: string
 

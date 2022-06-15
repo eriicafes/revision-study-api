@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { CreateTagDto } from './dto/create-tag.dto'
 import { UpdateTagDto } from './dto/update-tag.dto'
 import { TagEntity } from './entities/tag.entity'
@@ -26,8 +26,6 @@ export class TagsService {
   public async findById(userId: string, id: string): Promise<TagEntity> {
     const tag = await this.tagsRepository.findById(userId, id)
 
-    if (!tag) throw new NotFoundException()
-
     return new TagEntity(tag)
   }
 
@@ -38,15 +36,23 @@ export class TagsService {
   ): Promise<TagEntity> {
     const tag = await this.tagsRepository.update(userId, id, updateTagDto)
 
-    if (!tag) throw new NotFoundException()
-
     return new TagEntity(tag)
   }
 
   public async remove(userId: string, id: string): Promise<TagEntity> {
     const tag = await this.tagsRepository.remove(userId, id)
 
-    if (!tag) throw new NotFoundException()
+    return new TagEntity(tag)
+  }
+
+  public async import(userId: string, id: string): Promise<TagEntity> {
+    const tag = await this.tagsRepository.import(userId, id)
+
+    return new TagEntity(tag)
+  }
+
+  public async clone(userId: string, id: string): Promise<TagEntity> {
+    const tag = await this.tagsRepository.clone(userId, id)
 
     return new TagEntity(tag)
   }
@@ -57,8 +63,6 @@ export class TagsService {
     questionId: string,
   ): Promise<TagEntity> {
     const tag = await this.tagsRepository.linkCollection(userId, id, questionId)
-
-    if (!tag) throw new NotFoundException()
 
     return new TagEntity(tag)
   }
@@ -73,8 +77,6 @@ export class TagsService {
       id,
       questionId,
     )
-
-    if (!tag) throw new NotFoundException()
 
     return new TagEntity(tag)
   }

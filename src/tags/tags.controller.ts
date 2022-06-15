@@ -10,7 +10,6 @@ import {
 import { User } from '~/auth/decorators/user.decorator'
 import { UserEntity } from '~/users/entities/user.entity'
 import { CreateTagDto } from './dto/create-tag.dto'
-import { LinkTagCollectionDto } from './dto/link-tag-collection.dto'
 import { UpdateTagDto } from './dto/update-tag.dto'
 import { TagsService } from './tags.service'
 
@@ -47,29 +46,31 @@ export class TagsController {
     return this.tagsService.remove(user.id, id)
   }
 
-  @Post(':id/collections/link')
+  @Post(':id/import')
+  import(@User() user: UserEntity, @Param('id') id: string) {
+    return this.tagsService.import(user.id, id)
+  }
+
+  @Post(':id/clone')
+  clone(@User() user: UserEntity, @Param('id') id: string) {
+    return this.tagsService.clone(user.id, id)
+  }
+
+  @Post(':id/collections/link/:collectionId')
   linkCollection(
     @User() user: UserEntity,
     @Param('id') id: string,
-    @Body() linkTagCollectionDto: LinkTagCollectionDto,
+    @Param('collectionId') collectionId: string,
   ) {
-    return this.tagsService.linkCollection(
-      user.id,
-      id,
-      linkTagCollectionDto.collectionId,
-    )
+    return this.tagsService.linkCollection(user.id, id, collectionId)
   }
 
-  @Post(':id/collections/unlink')
+  @Post(':id/collections/unlink/:collectionId')
   unlinkCollection(
     @User() user: UserEntity,
     @Param('id') id: string,
-    @Body() linkTagCollectionDto: LinkTagCollectionDto,
+    @Param('collectionId') collectionId: string,
   ) {
-    return this.tagsService.unlinkCollection(
-      user.id,
-      id,
-      linkTagCollectionDto.collectionId,
-    )
+    return this.tagsService.unlinkCollection(user.id, id, collectionId)
   }
 }

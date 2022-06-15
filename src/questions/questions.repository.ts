@@ -1,5 +1,9 @@
-import { Injectable } from '@nestjs/common'
-import { Prisma } from '@prisma/client'
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
+import { Answer, Prisma, Question } from '@prisma/client'
 import { PrismaService } from '~/core/services/prisma.service'
 
 @Injectable()
@@ -8,55 +12,45 @@ export class QuestionsRepository {
 
   public async create(
     userId: string,
-    createQuestionData: Omit<Prisma.QuestionCreateInput, 'user'>,
-  ) {
+    createQuestionData: Omit<Prisma.QuestionCreateInput, 'user' | 'creator'>,
+  ): Promise<Question> {
     return this.prismaService.question.create({
       data: {
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
         ...createQuestionData,
+        creatorId: userId,
+        userId,
       },
     })
   }
 
-  public async results(userId: string, id: string) {
+  public async answers(userId: string, id: string): Promise<Answer[]> {
     const question = await this.prismaService.question.findUnique({
       where: { id },
     })
 
-    if (!question) return null
-    if (question.userId !== userId) return null
+    if (!question) throw new NotFoundException('Question not found')
+    if (question.userId !== userId) throw new ForbiddenException()
 
-    return this.prismaService.resultQuestion.findMany({
+    return this.prismaService.answer.findMany({
       where: {
         question: { id },
-      },
-      include: {
-        result: {
-          include: {
-            test: true,
-          },
-        },
       },
     })
   }
 
-  public async findAll(userId: string) {
+  public async findAll(userId: string): Promise<Question[]> {
     return this.prismaService.question.findMany({
       where: { userId },
     })
   }
 
-  public async findById(userId: string, id: string) {
+  public async findById(userId: string, id: string): Promise<Question> {
     const question = await this.prismaService.question.findUnique({
       where: { id },
     })
 
-    if (!question) return null
-    if (question.userId !== userId) return null
+    if (!question) throw new NotFoundException('Question not found')
+    if (question.userId !== userId) throw new ForbiddenException()
 
     return question
   }
@@ -64,14 +58,14 @@ export class QuestionsRepository {
   public async update(
     userId: string,
     id: string,
-    updateQuestionData: Omit<Prisma.QuestionUpdateInput, 'user'>,
-  ) {
+    updateQuestionData: Omit<Prisma.QuestionUpdateInput, 'user' | 'creator'>,
+  ): Promise<Question> {
     const question = await this.prismaService.question.findUnique({
       where: { id },
     })
 
-    if (!question) return null
-    if (question.userId !== userId) return null
+    if (!question) throw new NotFoundException('Question not found')
+    if (question.userId !== userId) throw new ForbiddenException()
 
     return this.prismaService.question.update({
       where: { id: question.id },
@@ -79,13 +73,13 @@ export class QuestionsRepository {
     })
   }
 
-  public async remove(userId: string, id: string) {
+  public async remove(userId: string, id: string): Promise<Question> {
     const question = await this.prismaService.question.findUnique({
       where: { id },
     })
 
-    if (!question) return null
-    if (question.userId !== userId) return null
+    if (!question) throw new NotFoundException('Question not found')
+    if (question.userId !== userId) throw new ForbiddenException()
 
     return this.prismaService.question.delete({
       where: { id: question.id },
