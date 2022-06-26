@@ -2,10 +2,13 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common'
 import { NestFactory, Reflector } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard'
+import { AppConfigService } from './core/services/config.service'
 import { PrismaService } from './core/services/prisma.service'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
+
+  const appConfig = app.get(AppConfigService)
 
   // validate route input
   app.useGlobalPipes(
@@ -28,6 +31,6 @@ async function bootstrap() {
   const prismaService = app.get(PrismaService)
   await prismaService.enableShutdownHooks(app)
 
-  await app.listen(3000)
+  await app.listen(appConfig.get('PORT'))
 }
 bootstrap()
