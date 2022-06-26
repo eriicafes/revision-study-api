@@ -10,6 +10,6 @@ export class AppConfigService {
     K extends keyof EnvironmentVariables,
     V extends EnvironmentVariables[K],
   >(key: K) {
-    return this.configService.get<V>(key)
+    return this.configService.get(key) as V
   }
 }
