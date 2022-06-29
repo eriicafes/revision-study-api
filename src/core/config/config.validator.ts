@@ -2,6 +2,10 @@ import { plainToClass } from 'class-transformer'
 import { IsNotEmpty, IsNumber, IsPositive, validateSync } from 'class-validator'
 
 export class EnvironmentVariables {
+  @IsNumber()
+  @IsPositive()
+  PORT!: number
+
   @IsNotEmpty()
   DATABASE_URL!: string
 
